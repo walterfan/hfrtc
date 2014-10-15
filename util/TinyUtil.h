@@ -45,6 +45,10 @@
 #define COUT std::cout <<"\n["<<time(NULL)<<"]\t"<< __FILE__ << "," << std::dec << __LINE__ << " : "
 #endif
 
+#ifndef INFO_TRACE
+#define INFO_TRACE(msg) std::cout <<"\n["<<time(NULL)<<"]\t"<< __FILE__ << "," << std::dec << __LINE__ << " : "<< msg <<endl;
+#endif
+
 #ifndef ASSERT
 #define ASSERT(condition) { \
     if(!(condition)) \

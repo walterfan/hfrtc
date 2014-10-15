@@ -43,7 +43,7 @@ public:
 	virtual void SetOption(int optionKey, void* optionValue) = 0;
 	virtual void* GetOption(int optionKey) = 0;
 
-	virtual int Init(TRANSPORT_PROTOCOL trptType, int nPort=2008) = 0;
+	virtual int Init(TRANSPORT_PROTOCOL trptType=TRANSPORT_TCP, int nPort=2008) = 0;
 	virtual int Start() = 0;
 	virtual int Run() = 0;
 	virtual int Stop() = 0;
@@ -60,7 +60,7 @@ public:
 	virtual void SetOption(int optionKey, void* optionValue) ;
 	virtual void* GetOption(int optionKey) ;
 
-	virtual int Init(TRANSPORT_PROTOCOL trptType, int nPort=2008);
+	virtual int Init(TRANSPORT_PROTOCOL trptType=TRANSPORT_TCP, int nPort=2008);
 	virtual int Start();
 	virtual int Run();
 	virtual int Stop();
@@ -74,7 +74,7 @@ private:
 class CTinyServerFactory
 {
 public:
-	ITinyServer* createServer(SVC_PROTOCOL svcType);
+	static ITinyServer* CreateServer(SVC_PROTOCOL svcType);
 };
 
 #endif /* TINYSERVER_H_ */
