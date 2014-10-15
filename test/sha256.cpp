@@ -29,22 +29,28 @@ int message_digest(const BYTE *message, BYTE **digest, unsigned int *digest_len,
 	if((mdctx = EVP_MD_CTX_create()) == NULL)
 		return -1;
 
-	if(1 != EVP_DigestInit_ex(mdctx, method, NULL))
+	if(1 != EVP_DigestInit_ex(mdctx, method, NULL)) {
+		EVP_MD_CTX_destroy(mdctx);
 		return -2;
-
-	if(1 != EVP_DigestUpdate(mdctx, message, strlen((const char*)message)))
+	}
+	if(1 != EVP_DigestUpdate(mdctx, message, strlen((const char*)message))) {
+		EVP_MD_CTX_destroy(mdctx);
 		return -3;
 
-	
+	}	
 	if(NULL == *digest) {
 		//if((*digest = (BYTE *)malloc(32)) == NULL)
-		if((*digest = (BYTE *)OPENSSL_malloc(EVP_MD_size(method))) == NULL)
+		if((*digest = (BYTE *)OPENSSL_malloc(EVP_MD_size(method))) == NULL) {
+		    EVP_MD_CTX_destroy(mdctx);
 			return -4;
+		}
 	}
 	
-	if(1 != EVP_DigestFinal_ex(mdctx, *digest, digest_len))
+	if(1 != EVP_DigestFinal_ex(mdctx, *digest, digest_len)) {
+		EVP_MD_CTX_destroy(mdctx);
 		return -5;
-
+	}
+	
 	EVP_MD_CTX_destroy(mdctx);
 	return 0;
 }
