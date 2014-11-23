@@ -12,6 +12,9 @@ env.Append( CPPPATH=['./src', './util', '/usr/include'])
 
 env.Library('./lib/tinyutil', ['./util/TinyUtil.cpp', './util/TinyTimer.cpp', './util/TinyServer.cpp', './util/TinyClient.cpp', './util/TinyRio.cpp'])
 
-env.Program(target='./bin/hfrtc', source=['./src/hfrtc.cpp'], LIBS = ['tinyutil'], LIBPATH = ['./lib', LIB_PATH  ])
+env.Program(target='./bin/hfrtc', source=['./src/hfrtc.cpp'], LIBS = ['tinyutil', 'pthread'], LIBPATH = ['./lib', LIB_PATH  ])
 
 env.Program(target='./bin/sha256', source=['./test/sha256.cpp'], LIBS=['ssl', 'crypto'], LIBPATH = ['./bin', LIB_PATH  ])
+
+env.Program(target='./bin/waltertest', source=['./test/waltertest.cpp' , './test/20141031.cpp'], 
+	LIBS = ['tinyutil', 'pthread'], LIBPATH = ['./lib', LIB_PATH  ])
