@@ -207,6 +207,21 @@ std::string rtrim(const std::string& str, const std::string& whitespace )
     return str.substr(0, strRange);
 }
 
+string ReplaceValueAsKey(const string& str, const char* key,
+		const char* mask, const char* sep)
+{
+
+	string::size_type nBegin = str.find(key);
+	if(string::npos == nBegin) return str;
+
+	string::size_type nEnd = str.find(sep, nBegin);
+
+	if(string::npos == nEnd) {
+		return str.substr(0, nBegin) + key + mask;
+	}
+	return str.substr(0, nBegin) + key + mask + str.substr(nEnd);
+}
+
 int file2msg(const char* filename,string& msg)
 {
     ifstream ifile(filename);
@@ -310,6 +325,28 @@ void WriteLog(char* filename, int line, char *fmt,...)
     
     SESSION_TRACKER++;
     fclose(fp);
+}
+
+void DumpCallStack(std::ostream &os)
+{
+	void* trace[ 64 ];
+	char** messages = NULL;
+	int trace_size = 0;
+
+	os << "Begin Stack Frame Dump" << std::endl;
+	os << "(if useful symbols are not found, try recompiling "
+		<< "with -rdynamic during link, and -g without -O#)"
+		<< std::endl;
+	trace_size = backtrace( trace, 64 );
+	messages = backtrace_symbols( trace, trace_size );
+	for( int i = 0; i < trace_size; ++i )
+	{
+		os << "Traced: " << messages[i] << std::endl;
+	}
+
+	os << "End Stack Frame Dump" << std::endl;
+
+    free (messages);
 }
 
 }//--end of namespace wfan

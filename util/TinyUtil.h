@@ -136,6 +136,8 @@ namespace wfan {
 
     std::string rtrim(const std::string& str, const std::string& whitespace = " \t");
 
+    std::string ReplaceValueAsKey(const std::string& str, const char*  szKey, const char* szMask, const char* szSep);
+
 	int file2msg(const char* filename,std::string& msg);
 
 	int file2msg(const char* filename,char *msg);

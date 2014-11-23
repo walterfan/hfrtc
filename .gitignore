@@ -1,0 +1,6 @@
+*.bak
+*.class
+*.o
+*.pyc
+*.lock
+*.DS_Store
