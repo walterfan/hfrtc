@@ -30,21 +30,15 @@ long long current_timestamp(char arrTimeStr[TIME_FMT_LEN]) {
         //snprintf(char * restrict str, size_t size, const char * restrict format,
         snprintf(arrTimeStr, TIME_FMT_LEN, "%s.%06d", time_string, tv.tv_usec);
     }
-    long long total_milliseconds = tv.tv_sec * 1000LL + tv.tv_usec / 1000; // caculate milliseconds
+    long long total_us = tv.tv_sec * 1000000LL + tv.tv_usec ; // caculate milliseconds
     // printf("milliseconds: %lld\n", milliseconds);
-    return total_milliseconds;
+    return total_us;
 }
 
 // [SpiderMonkey 24] Use JSBool instead of bool.
 static bool debug_trace(JSContext *cx, unsigned argc, jsval *vp) {
     JS::CallArgs args = CallArgsFromVp(argc, vp);
-    /*
-     * Look in argv for argc actual parameters, set *rval to return a
-     * value to the caller.
-     *
-     * ex. Add two arguments as integer.
-     * args.rval().setInt32(args[0].toInt32() + args[1].toInt32());
-     */
+
     char szTimeStr[TIME_FMT_LEN] = { '\0' };
     current_timestamp(szTimeStr);
     if (args.length() > 0) {
@@ -152,7 +146,7 @@ int run(JSContext *cx, const char* pScript) {
     long long begin_time = current_timestamp(NULL);
     test(cx, &global, pScript);
     long long end_time = current_timestamp(NULL);
-    printf("calling costs %lld ms\n", end_time - begin_time);
+    printf("calling costs %lld microseconds\n", end_time - begin_time);
 
     return 0;
 }
