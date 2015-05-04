@@ -38,4 +38,4 @@ AC_FUNC_MALLOC
 AC_FUNC_MKTIME
 AC_CHECK_FUNCS([gettimeofday strerror])
 # note: out Makefile
-AC_OUTPUT(Makefile test/Makefile util/Makefile)
+AC_OUTPUT(Makefile test/Makefile util/Makefile src/Makefile third_party/Makefile)

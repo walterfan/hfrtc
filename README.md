@@ -14,5 +14,7 @@ I want to learn the technique, write a sample client and server for online colla
 * gtest and gmock
 * webrtc
 * boost1.53
-
+* spidermonkey
+* libevent
+** ./configure; make; make install
 
