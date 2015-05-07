@@ -26,10 +26,13 @@ clean-local:
 #	cd $(LUABIND_DIR) && $(MAKE) $(AM_MAKEFLAGS) clean
 
 
-noinst_PROGRAMS = http_client rot13fork rot13select rot13event1 rot13event2 waltertest unittest jsenginetest
+noinst_PROGRAMS = http_client http_server rot13fork rot13select rot13event1 rot13event2 waltertest unittest SpiderMonkeyTest V8Test
 
 
 http_client_SOURCES = http_client_1st.cpp
+
+http_server_SOURCES = http_server_1st.cpp
+http_server_LDADD = -levent
 
 rot13fork_SOURCES = rot13_fork_1st.cpp
 rot13select_SOURCES = rot13_select_1st.cpp
@@ -45,9 +48,14 @@ waltertest_LDADD=../util/.libs/libtinyutil.a
 waltertest_LDFLAGS=-D_GNU_SOURCE
 DEFS+=-D_GNU_SOURCE
 
-jsenginetest_SOURCES = SpiderMonkeyTest.cpp 
-jsenginetest_CPPFLAGS = -I/usr/local/include/mozjs-31 -std=c++11
-jsenginetest_LDADD = -lmozjs-31
+SpiderMonkeyTest_SOURCES = SpiderMonkeyTest.cpp 
+SpiderMonkeyTest_CPPFLAGS = -I$(top_srcdir)/third_party/mozjs -std=c++11
+SpiderMonkeyTest_LDADD = -lmozjs-31
+
+V8Test_SOURCES = v8test.cpp 
+V8Test_CPPFLAGS = -I$(top_srcdir)/third_party/v8 -I$(top_srcdir)/util -pthread -lrt -stdlib=libstdc++ -std=c++11
+V8Test_LDFLAGS =  -L/workspace/cpp/v8/xcodebuild/Release -L$(top_srcdir)/util -stdlib=libstdc++ -std=c++11
+V8Test_LDADD = -lv8_base -lv8_libbase -lv8_snapshot -lv8_libplatform -licuuc -licui18n -licudata  -ltinyutil
 
 unittest_SOURCES = UnitTest.cpp server_test.cpp lua_test.cpp
 unittest_CPPFLAGS = -I$(GMOCK_DIR)/include -I$(GTEST_DIR)/include -I$(LUA_DIR)/src -I$(top_srcdir)/util

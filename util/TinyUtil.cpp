@@ -349,4 +349,63 @@ void DumpCallStack(std::ostream &os)
     free (messages);
 }
 
+long long current_timestamp(char arrTimeStr[TIME_FMT_LEN]) {
+    struct timeval tv;
+    struct tm* ptm;
+    char time_string[40];
+
+    gettimeofday(&tv, NULL); // get current time
+    if (arrTimeStr) {
+        ptm = localtime(&tv.tv_sec);
+        /* Format the date and time, down to a single second.  */
+        strftime(time_string, sizeof(time_string), "%Y-%m-%d %H:%M:%S", ptm);
+        /* Compute milliseconds from microseconds.  */
+        //snprintf(char * restrict str, size_t size, const char * restrict format,
+        snprintf(arrTimeStr, TIME_FMT_LEN, "%s.%06d", time_string, tv.tv_usec);
+    }
+    long long total_us = tv.tv_sec * 1000000LL + tv.tv_usec ; // caculate milliseconds
+    // printf("milliseconds: %lld\n", milliseconds);
+    return total_us;
+}
+
+int load_file_malloc(const char* szFile, char*& pBuffer, long* pBufSize) 
+{
+    FILE * pFile = NULL;
+    long lSize = 0;
+    size_t result = 0;
+
+    pFile = fopen(szFile, "r");
+    if (pFile == NULL) {
+        fputs("File open error", stderr);
+        return 1;
+    }
+
+    // obtain file size:
+    fseek(pFile, 0, SEEK_END);
+    lSize = ftell(pFile);
+    rewind(pFile);
+
+    // allocate memory to contain the whole file:
+    pBuffer = (char*) malloc(sizeof(char) * lSize);
+    if (pBuffer == NULL) {
+        fputs("Memory allocate error", stderr);
+        fclose(pFile);
+        return 2;
+    }
+
+    // copy the file into the buffer:
+    result = fread(pBuffer, 1, lSize, pFile);
+    if (result != lSize) {
+        fputs("Reading file error", stderr);
+        fclose(pFile);
+        return 3;
+    }
+    if (pBufSize)
+        *pBufSize = lSize;
+
+    fclose(pFile);
+    return 0;
+}
+
+
 }//--end of namespace wfan

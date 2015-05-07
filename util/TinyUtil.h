@@ -12,6 +12,7 @@
 
 #define RET_ERR 1
 #define RET_OK 0
+#define TIME_FMT_LEN 50
 
 #define ERR_RETURN(ret,fmt, ...) \
     do { \
@@ -149,6 +150,10 @@ namespace wfan {
 	std::string LowerCase( const std::string& p_string );
 
     void WriteLog(char* filename, int line, char *fmt,...);
+	
+	long long current_timestamp(char arrTimeStr[TIME_FMT_LEN]);
+	
+	int load_file_malloc(const char* szFile, char*& pBuffer, long* pBufSize = NULL) ;
 
 }
 

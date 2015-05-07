@@ -39,9 +39,10 @@ long long current_timestamp(char arrTimeStr[TIME_FMT_LEN]) {
 static bool debug_trace(JSContext *cx, unsigned argc, jsval *vp) {
     JS::CallArgs args = CallArgsFromVp(argc, vp);
 
-    char szTimeStr[TIME_FMT_LEN] = { '\0' };
-    current_timestamp(szTimeStr);
+    
     if (args.length() > 0) {
+	    char szTimeStr[TIME_FMT_LEN] = { '\0' };
+	    current_timestamp(szTimeStr);
         JSString *str = args[0].toString();
         printf("[%s] %s\n", szTimeStr, JS_EncodeString(cx, str));
     }
