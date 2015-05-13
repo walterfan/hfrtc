@@ -1,6 +1,6 @@
 AUTOMAKE_OPTIONS = foreign
 LUA_DIR=$(top_srcdir)/third_party/lua-5.3.0
-LIBEVENT_DIR=$(top_srcdir)/third_party/libevent-2.0.22-stable
+LIBEVENT_DIR=$(top_srcdir)/third_party/libevent
 
 lib_LTLIBRARIES = libtinyutil.la
 libtinyutil_la_SOURCES = TinyUtil.cpp  TinyTimer.cpp  TinyServer.cpp  TinyClient.cpp  TinyRio.cpp LuaUtil.cpp
