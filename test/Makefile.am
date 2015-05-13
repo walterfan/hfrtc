@@ -9,7 +9,7 @@ LUA_DIR=$(top_srcdir)/third_party/lua-5.3.0
 #LUABIND_DIR=$(top_srcdir)/third_party/luabind-0.7.1-rc1
 
 all-local:
-	cd $(GMOCK_DIR) &&  autoreconf -fvi && $(MAKE) $(AM_MAKEFLAGS) 
+	cd $(GMOCK_DIR) &&  autoreconf -fvi && ./configure && $(MAKE) $(AM_MAKEFLAGS) 
 	cd $(PROTOBUF_DIR) && $(MAKE) $(AM_MAKEFLAGS) 
 	cd $(LUA_DIR) && $(MAKE) $(AM_MAKEFLAGS) posix
 #	cd $(LUABIND_DIR) && $(MAKE) $(AM_MAKEFLAGS) all
@@ -34,7 +34,7 @@ noinst_PROGRAMS = http_client http_server rot13fork rot13select rot13event1 rot1
 http_client_SOURCES = http_client_1st.cpp
 
 http_server_SOURCES = http_server_1st.cpp
-http_server_CPPFLAGS= -I$(LIBEVENT_DIR)/include
+http_server_CPPFLAGS= -I$(LIBEVENT_DIR) -I$(LIBEVENT_DIR)/include
 http_server_LDFLAGS =-L$(LIBEVENT_DIR)
 http_server_LDADD = -levent
 

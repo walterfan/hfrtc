@@ -6,7 +6,7 @@ PROTOBUF_DIR=$(top_srcdir)/third_party/protobuf
 LUA_DIR=$(top_srcdir)/third_party/lua-5.3.0
 
 all-local:
-	cd $(LIBEVENT_DIR) && ./configure && $(MAKE) $(AM_MAKEFLAGS)
+	cd $(LIBEVENT_DIR) && ./autogen.sh && ./configure && $(MAKE) $(AM_MAKEFLAGS)
 	cd $(PROTOBUF_DIR) && ./autogen.sh && ./configure && $(MAKE) $(AM_MAKEFLAGS) 
 	cd $(LUA_DIR) && $(MAKE) $(AM_MAKEFLAGS) posix
 	
