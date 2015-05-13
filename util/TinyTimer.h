@@ -11,6 +11,11 @@
 #include <stdint.h>
 #include <sys/time.h>
 
+#ifndef NULL
+#define NULL (0)
+#endif
+
+
 namespace wfan {
 
 typedef enum {

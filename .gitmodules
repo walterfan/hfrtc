@@ -1,0 +1,9 @@
+[submodule "third_party/protobuf"]
+	path = third_party/protobuf
+	url = https://github.com/google/protobuf.git
+[submodule "third_party/libevent"]
+	path = third_party/libevent
+	url = https://github.com/libevent/libevent.git
+[submodule "third_party/googlemock"]
+	path = third_party/googlemock
+	url = https://github.com/walterfan/googlemock.git

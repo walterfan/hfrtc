@@ -1,5 +1,8 @@
 #include "TinyUtil.h"
 #include "TinyServer.h"
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 #include <memory>
 
 

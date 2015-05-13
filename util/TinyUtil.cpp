@@ -13,6 +13,7 @@
 #include <stdarg.h>
 #include <time.h>
 #include <sys/time.h>
+#include <stdint.h>
 
 int octet_weight[256] = {
   0, 1, 1, 2, 1, 2, 2, 3,

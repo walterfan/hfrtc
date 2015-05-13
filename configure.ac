@@ -1,11 +1,12 @@
 #                                               -*- Autoconf -*-
 # Process this file with autoconf to produce a configure script.
 # note: replace [FULL-PACKAGE-NAME]
-AC_PREREQ([2.68])
+AC_PREREQ([2.63])
 AC_INIT(hfrtc, 1.0)
 # note: add automake
 AM_INIT_AUTOMAKE([-Wall])
-AM_PROG_AR
+#AM_PROG_AR
+m4_pattern_allow([AM_PROG_AR], [AM_PROG_AR])
 
 # library building
 #AC_PROG_RANLIB

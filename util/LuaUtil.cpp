@@ -132,9 +132,9 @@ int CLuaUtil::LoadLuaFile(lua_State *pState, const char* pFileName)
 void CLuaUtil::Init()
 {
     m_pState = luaL_newstate();
-    luaL_openlibs(m_pState);
+    //luaL_openlibs(m_pState);
     //luabind open
-	//open(m_pState);
+    //open(m_pState);
 }
 
 void CLuaUtil::Clean()
