@@ -6,19 +6,19 @@ PROTOBUF_DIR=$(top_srcdir)/third_party/protobuf
 LUA_DIR=$(top_srcdir)/third_party/lua-5.3.0
 
 all-local:
-	cd $(LIBEVENT_DIR) && ./autogen.sh && ./configure && $(MAKE) $(AM_MAKEFLAGS)
-	cd $(PROTOBUF_DIR) && ./autogen.sh && ./configure && $(MAKE) $(AM_MAKEFLAGS) 
-	cd $(LUA_DIR) && $(MAKE) $(AM_MAKEFLAGS) posix
+#	cd $(LIBEVENT_DIR) && ./autogen.sh && ./configure && $(MAKE) $(AM_MAKEFLAGS)
+#	cd $(PROTOBUF_DIR) && ./autogen.sh && ./configure && $(MAKE) $(AM_MAKEFLAGS) 
+#	cd $(LUA_DIR) && $(MAKE) $(AM_MAKEFLAGS) posix
 	
 check-local:
-	cd $(LIBEVENT_DIR) && $(MAKE) $(AM_MAKEFLAGS) verify
-	cd $(PROTOBUF_DIR) && $(MAKE) $(AM_MAKEFLAGS) test
-	cd $(LUA_DIR) && $(MAKE) $(AM_MAKEFLAGS) test
+#	cd $(LIBEVENT_DIR) && $(MAKE) $(AM_MAKEFLAGS) verify
+#	cd $(PROTOBUF_DIR) && $(MAKE) $(AM_MAKEFLAGS) test
+#	cd $(LUA_DIR) && $(MAKE) $(AM_MAKEFLAGS) test
 	
 clean-local:
-	cd $(LIBEVENT_DIR) && $(MAKE) $(AM_MAKEFLAGS) clean
-	cd $(PROTOBUF_DIR) && $(MAKE) $(AM_MAKEFLAGS) clean
-	cd $(LUA_DIR) && $(MAKE) $(AM_MAKEFLAGS) clean
+#	cd $(LIBEVENT_DIR) && $(MAKE) $(AM_MAKEFLAGS) clean
+#	cd $(PROTOBUF_DIR) && $(MAKE) $(AM_MAKEFLAGS) clean
+#	cd $(LUA_DIR) && $(MAKE) $(AM_MAKEFLAGS) clean
 
 noinst_PROGRAMS = hfrtc admin
 

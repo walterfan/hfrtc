@@ -9,21 +9,21 @@ LUA_DIR=$(top_srcdir)/third_party/lua-5.3.0
 #LUABIND_DIR=$(top_srcdir)/third_party/luabind-0.7.1-rc1
 
 all-local:
-	cd $(GMOCK_DIR) &&  autoreconf -fvi && ./configure && $(MAKE) $(AM_MAKEFLAGS) 
-	cd $(PROTOBUF_DIR) && $(MAKE) $(AM_MAKEFLAGS) 
-	cd $(LUA_DIR) && $(MAKE) $(AM_MAKEFLAGS) posix
+#	cd $(GMOCK_DIR) &&  autoreconf -fvi && ./configure && $(MAKE) $(AM_MAKEFLAGS) 
+#	cd $(PROTOBUF_DIR) && $(MAKE) $(AM_MAKEFLAGS) 
+#	cd $(LUA_DIR) && $(MAKE) $(AM_MAKEFLAGS) posix
 #	cd $(LUABIND_DIR) && $(MAKE) $(AM_MAKEFLAGS) all
 	
 check-local:
-	cd $(GMOCK_DIR) && $(MAKE) $(AM_MAKEFLAGS) test
-	cd $(PROTOBUF_DIR) && $(MAKE) $(AM_MAKEFLAGS) test
-	cd $(LUA_DIR) && $(MAKE) $(AM_MAKEFLAGS) test
+#	cd $(GMOCK_DIR) && $(MAKE) $(AM_MAKEFLAGS) test
+#	cd $(PROTOBUF_DIR) && $(MAKE) $(AM_MAKEFLAGS) test
+#	cd $(LUA_DIR) && $(MAKE) $(AM_MAKEFLAGS) test
 #	cd $(LUABIND_DIR) && $(MAKE) $(AM_MAKEFLAGS) test
 	
 clean-local:
-	cd $(GMOCK_DIR) && $(MAKE) $(AM_MAKEFLAGS) clean
-	cd $(PROTOBUF_DIR) && $(MAKE) $(AM_MAKEFLAGS) clean
-	cd $(LUA_DIR) && $(MAKE) $(AM_MAKEFLAGS) clean
+#	cd $(GMOCK_DIR) && $(MAKE) $(AM_MAKEFLAGS) clean
+#	cd $(PROTOBUF_DIR) && $(MAKE) $(AM_MAKEFLAGS) clean
+#	cd $(LUA_DIR) && $(MAKE) $(AM_MAKEFLAGS) clean
 #	cd $(LUABIND_DIR) && $(MAKE) $(AM_MAKEFLAGS) clean
 
 
