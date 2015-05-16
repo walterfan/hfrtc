@@ -17,8 +17,8 @@
 *   created on 04/25/2013
 *
 -----------------------------------------------------------*/
-#ifndef _TEST_UTIL_H__
-#define _TEST_UTIL_H__
+#ifndef _TINY_UTIL_H__
+#define _TINY_UTIL_H__
 
 #include <string>
 
