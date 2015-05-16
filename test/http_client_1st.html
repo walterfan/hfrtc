@@ -1,0 +1,131 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Development Manual</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- Bootstrap -->
+<link rel="stylesheet" href="../site/css/bootstrap.min.css">
+<script type="text/javascript" src="../site/js/jquery.min.js"></script>
+
+<link href="../site/css/layout2.css" media="all" rel="stylesheet" />
+<link href="../site/css/slide.css" media="all" rel="stylesheet" />
+<link href="../site/css/font.css" media="all" rel="stylesheet" />
+<script type="text/javascript">
+
+$(function(){
+    //handle login logic
+    $("button:first").click(function(){
+    	$.post("", function(data) {
+    		
+    	})
+    })
+    //handle
+});
+
+</script>
+<style type="text/css">
+
+.contentTab {
+    width: 60%;
+    margin-bottom: 20px;
+
+}
+.contentTab caption {
+    padding: 6px;
+	border: 1px solid black;
+    background-color: #ddeeff;
+    color: green;
+    font-size: 1.2em;
+}
+.contentTab thead > tr {
+    background-color: #CCFFEE;
+    border: 2px groove #ddeeff;
+}
+.contentTab tbody {
+    border: 2px groove #ddeeff;
+}
+
+.contentTab tbody > tr > td {
+    font-size: 1.0em;
+	padding: 6px;
+}
+.contentTab thead > tr > th {
+    font-size: 1.1em;
+}
+
+.fullBtn{ 
+    width:5em;
+    background-color:#cfe
+}
+
+.contentTab tfoot > tr > td {
+    text-align: right;    
+    font-size: 1.1em;
+    font-family: Arial;
+
+}
+
+
+.table-hover tbody > tr:hover > td, 
+.table-hover tbody > tr:hover > th {
+    background-color: #9999ff
+}
+.footer { margin-left: auto; margin-right:auto; *zoom: 1;}
+</style>
+
+
+
+</head>
+
+<body>
+<div id="container">
+<div id="top">
+<h1>MGC (Multimedia Group Chat) v1.0</h1>
+
+<div style="clear:both"></div>
+</div>
+
+<div id="leftnav">
+	
+<div>
+  <ul>
+    <li><a href="#">Create Room</a></li>
+    <li><a href="#">Join Room</a></li>
+    <li><a href="#">Join Audio</a></li>
+    <li><a href="#">Join Video</a></li>
+    <li><a href="#">Share Desktop</a></li>
+  </ul>
+</div>
+
+</div>
+
+<div id="content">
+<form name="ajaxform" id="ajaxform" action="ajax-form-submit.php" method="POST">
+	<table class="contentTab">
+		<caption>Welcome</caption>
+
+		<tbody>
+		<tr>
+			<td>Username:</td> <td><input type="text" size="30"> *</td>
+		</tr>
+		<tr>
+			<td>Password:</td> <td><input type="password" size="30"> *</td>
+		</tr>
+	</tbody>
+	<tfoot>
+		<tr>
+			<td colspan="2" align="right"><button class="fullBtn">Login</button>&nbsp;&nbsp;<button  class="fullBtn">Register</button></td>
+		</tr>
+	</tfoot>
+	</table>
+</form>
+
+</div><!-- content div end -->
+<div id="footer">
+<h2>Copyright &copy; 2009-2010 <a
+    href="mailto:walter.fan@gmail.com"> <em>Walter Fan</em></a> all rights
+reserved.</h2>
+</div>
+</div>
+</body>
+</html>
