@@ -323,7 +323,7 @@ done:
 static void
 syntax(void)
 {
-	fprintf(stdout, "Syntax: http-server <docroot>\n");
+	fprintf(stdout, "Syntax: http-server <docroot> [port]\n");
 }
 
 int
