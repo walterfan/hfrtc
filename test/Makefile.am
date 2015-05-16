@@ -54,8 +54,9 @@ rot13event2_CPPFLAGS= -I$(LIBEVENT_DIR)/include
 
 
 waltertest_SOURCES = waltertest.cpp 20141031.cpp
+waltertest_CPPFLAGS = -I$(top_srcdir)/util -I$(top_srcdir)/src -Wall -fprofile-arcs -ftest-coverage
 waltertest_LDADD=../util/.libs/libtinyutil.a 
-waltertest_LDFLAGS=-D_GNU_SOURCE
+waltertest_LDFLAGS=-D_GNU_SOURCE -lgcov
 DEFS+=-D_GNU_SOURCE
 
 SpiderMonkeyTest_SOURCES = SpiderMonkeyTest.cpp 

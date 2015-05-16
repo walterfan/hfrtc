@@ -4,7 +4,7 @@ GTEST_DIR=./googlemock/gtest
 PROTOBUF_DIR=./protobuf
 LUA_DIR=./lua-5.3.0
 #LUABIND_DIR=./luabind-0.7.1-rc1
-OS=macosx
+OS=generic
 
 all:
 	
