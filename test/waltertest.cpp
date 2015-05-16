@@ -40,9 +40,3 @@ int main(int argc, char *argv[])
     return 0;
 }
 
-//For TSP three, five, fourteen, 
-//the feature has five items. We had discussion with PM, and we got agreement of four items 
-//--We will do three items in t30, postpone one to T thirty-one.
-//we just have an issue of one item. The main change of the item is on TPGW side
-//PM said he will talk with TPGW team. So, we hold on the item until PM get agreement from TPGW team
-//test automation to avoid regression issue, it is not once change, we add more and more test automation cases
