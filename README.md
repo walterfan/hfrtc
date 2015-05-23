@@ -1,11 +1,6 @@
 Overview                        {#mainpage}
 =============================
-It's WebRTC sample project.
-
-WebRTC is so cool, there are a lot of projects based on it.
-
-I want to learn the technique, write a sample client and server for online collaboration
-
+It's a sample project for real time communication
 
 Dependent Library
 ----------------------------
@@ -17,6 +12,11 @@ Dependent Library
 * spidermonkey
 * libevent
 * v8
+
+Dependent Tools
+----------------------------
+* Autotools: autoconf, automake, libtool
+* Maven
 
 
 Reference
