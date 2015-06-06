@@ -298,7 +298,7 @@
 			</testResource>
 		</testResources>
 		<directory>.\target</directory>
-		<finalName>ua-1.0</finalName>
+		<finalName>hfua-1.0</finalName>
 		<pluginManagement>
 			<plugins>
 				<plugin>
@@ -354,7 +354,6 @@
 			</plugin>
 			<plugin>
 				<artifactId>maven-assembly-plugin</artifactId>
-				<version>2.5.4</version>
 				<executions>
 					<execution>
 						<id>make-assembly</id>
@@ -365,7 +364,7 @@
 						<configuration>
 							<archive>
 								<manifest>
-									<mainClass>com.github.walterfan.web.Portal</mainClass>
+									<mainClass>com.github.walterfan.hfua.web.Portal</mainClass>
 								</manifest>
 							</archive>
 							<descriptorRefs>
@@ -422,19 +421,7 @@
 					</execution>
 				</executions>
 			</plugin>
-			<plugin>
-				<artifactId>maven-surefire-plugin</artifactId>
-				<version>2.10</version>
-				<executions>
-					<execution>
-						<id>default-test</id>
-						<phase>test</phase>
-						<goals>
-							<goal>test</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
+			
 			<plugin>
 				<artifactId>maven-jar-plugin</artifactId>
 				<version>2.3.2</version>

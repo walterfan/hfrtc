@@ -16,7 +16,6 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.Response;
 
 import com.github.walterfan.hfua.domain.Room;
-import com.github.walterfan.hfua.domain.Rooms;
 /*
  * List: GET http://host/api/v1/rooms
  * Create: POST http://host/api/v1/rooms
