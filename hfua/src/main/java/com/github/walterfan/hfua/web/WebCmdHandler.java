@@ -1,4 +1,4 @@
-package com.github.walterfan.web;
+package com.github.walterfan.hfua.web;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -43,13 +43,12 @@ public class WebCmdHandler implements WebHandler {
 			}
 
 			String method = request.getMethod();
+			String pathInfo = request.getPathInfo();
+
+			logger.info("waltertest: request path=" + pathInfo+ ", method=" +method);
 			
-			if (null == method) {
-				return;
-			}
 			// judge request method, support GET/POST method for nows
-			if (method.equals("GET")
-					|| method.equals("POST")) {
+			if (pathInfo != null && pathInfo.endsWith("test")) {
 				WebContent webReq = WebContent.createWebContent(request);
 				logger.info("waltertest: content=" + webReq.toString());
 				this.writeResponse("OKOKOK, got request: " + webReq.toHtmlString(), response);

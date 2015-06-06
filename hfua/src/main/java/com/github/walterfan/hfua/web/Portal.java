@@ -1,10 +1,6 @@
-package com.github.walterfan.web;
+package com.github.walterfan.hfua.web;
 
-import java.io.File;
 import java.io.IOException;
-import java.net.URL;
-import java.security.ProtectionDomain;
-import java.util.Collections;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -12,16 +8,20 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang.math.NumberUtils;
-import org.eclipse.jetty.security.HashLoginService;
-import org.eclipse.jetty.security.LoginService;
 import org.eclipse.jetty.server.Handler;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.handler.DefaultHandler;
 import org.eclipse.jetty.server.handler.HandlerList;
 import org.eclipse.jetty.server.handler.ResourceHandler;
+import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHandler;
+import org.eclipse.jetty.servlet.ServletHolder;
 import org.eclipse.jetty.util.log.Log;
 import org.eclipse.jetty.util.log.Logger;
+import org.jboss.resteasy.plugins.server.servlet.HttpServletDispatcher;
+
+import com.github.walterfan.hfua.rest.RestfulApplication;
+import com.github.walterfan.util.ConfigLoader;
 
 public class Portal extends HttpServlet {
 	
@@ -32,6 +32,7 @@ public class Portal extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private static final Logger logger = Log.getLogger(Portal.class);
 	private static final String CONFIG_DIR = "./etc";
+	private static final String CMD_PATH = "/cmd/v1/*";
 	private static final String API_PATH = "/api/v1/*";
 	private static String CONFIG_FILE = "hfrtc.properties";
 	private static int WEB_PORT = 8080;
@@ -76,13 +77,15 @@ public class Portal extends HttpServlet {
 		HandlerList handlers = new HandlerList();
 
 		Handler handler2 = createStaticWebApp(HOME_FOLDER, HOME_PAGE);
-		Handler handler3 = createServletApp(API_PATH);
-		Handler handler4 = new DefaultHandler();
+		Handler handler3 = createServletApp(CMD_PATH);
+		Handler handler4 = createRestfulApp(API_PATH);
+		Handler handler5 = new DefaultHandler();
 		
 		
 		handlers.addHandler(handler2);
 		handlers.addHandler(handler3);
 		handlers.addHandler(handler4);
+		handlers.addHandler(handler5);
 		
 		_server.setHandler(handlers);
 		_server.start();
@@ -110,6 +113,18 @@ public class Portal extends HttpServlet {
 		return handler;
 	}
 
+	public Handler createRestfulApp(String path) throws Exception {
+		ServletContextHandler context = new ServletContextHandler(ServletContextHandler.SESSIONS);
+        context.setContextPath("/");
+       
+        ServletHolder servHolder = new ServletHolder(new HttpServletDispatcher());
+        servHolder.setInitParameter("javax.ws.rs.Application", 
+        		"com.github.walterfan.hfua.rest.RestfulApplication");
+        context.addServlet(servHolder, path);
+
+		return context;
+	}
+	
 	@Override
 	protected void doGet(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {

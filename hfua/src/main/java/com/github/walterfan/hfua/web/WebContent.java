@@ -1,4 +1,4 @@
-package com.github.walterfan.web;
+package com.github.walterfan.hfua.web;
 /** 
 * information holder of http request 
 * 
