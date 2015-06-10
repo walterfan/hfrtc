@@ -135,6 +135,12 @@
 			<scope>compile</scope>
 		</dependency>
 
+
+        <dependency>
+            <groupId>org.jboss.resteasy</groupId>
+            <artifactId>resteasy-jaxrs</artifactId>
+            <version>3.0.8.Final</version>
+        </dependency>
 	</dependencies>
 
 
@@ -365,6 +371,55 @@
 					</reportPlugins>
 				</configuration>
 			</plugin>
+			
+
+			        
+			        <plugin>
+			            <groupId>org.codehaus.mojo</groupId>
+			            <artifactId>exec-maven-plugin</artifactId>
+			            <version>1.2</version>
+			            <executions>
+			                <execution>
+			                    <id>raml-doc-assembler</id>
+			                    <phase>prepare-package</phase>
+			                    <goals>
+			                        <goal>java</goal>
+			                    </goals>
+			                    <configuration>
+			                        <mainClass>org.versly.rest.wsdoc.RestDocAssembler</mainClass>
+			                        <arguments>
+			                            <argument>--format</argument>
+			                            <argument>raml</argument>
+			                            <argument>--scope</argument>
+			                            <argument>all</argument>
+			                            <argument>-o</argument>
+			                            <argument>${project.build.directory}/${project.artifactId}.raml</argument>
+			                            <argument>${project.build.directory}/classes/org.versly.rest.wsdoc.web-service-api.ser</argument>
+			                        </arguments>
+			                    </configuration>
+			                </execution>
+			                <execution>
+			                    <id>raml-doc-assembler-public</id>
+			                    <phase>prepare-package</phase>
+			                    <goals>
+			                        <goal>java</goal>
+			                    </goals>
+			                    <configuration>
+			                        <mainClass>org.versly.rest.wsdoc.RestDocAssembler</mainClass>
+			                        <arguments>
+			                            <argument>--format</argument>
+			                            <argument>raml</argument>
+			                            <argument>--scope</argument>
+			                            <argument>public</argument>
+			                            <argument>-o</argument>
+			                            <argument>${project.build.directory}/public-${project.artifactId}.raml</argument>
+			                            <argument>${project.build.directory}/classes/org.versly.rest.wsdoc.web-service-api.ser</argument>
+			                        </arguments>
+			                    </configuration>
+			                </execution>
+			            </executions>
+			        </plugin>
+			
 		</plugins>
 	</build>
 	<reporting>
