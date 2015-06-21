@@ -269,13 +269,12 @@
 			<scope>compile</scope>
 		</dependency>
 
-
-		<dependency>
-			<groupId>com.github.walterfan.devaid</groupId>
+	<dependency>
+			<groupId>com.github.walterfan</groupId>
 			<artifactId>devaid</artifactId>
 			<version>1.4</version>
-			<scope>system</scope>
-			<systemPath>${project.basedir}/lib/devaid-1.4.jar</systemPath>
+		  <scope>system</scope>
+		  <systemPath>${project.basedir}/lib/devaid-1.4.jar</systemPath>
 		</dependency>
 
 	</dependencies>

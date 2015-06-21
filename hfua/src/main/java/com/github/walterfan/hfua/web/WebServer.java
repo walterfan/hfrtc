@@ -20,17 +20,17 @@ import org.eclipse.jetty.util.log.Log;
 import org.eclipse.jetty.util.log.Logger;
 import org.jboss.resteasy.plugins.server.servlet.HttpServletDispatcher;
 
-import com.github.walterfan.hfua.rest.RestfulApplication;
+import com.github.walterfan.service.IService;
 import com.github.walterfan.util.ConfigLoader;
 
-public class Portal extends HttpServlet {
+public class WebServer extends HttpServlet implements IService {
 	
 	
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	private static final Logger logger = Log.getLogger(Portal.class);
+	private static final Logger logger = Log.getLogger(WebServer.class);
 	private static final String CONFIG_DIR = "./etc";
 	private static final String CMD_PATH = "/cmd/v1/*";
 	private static final String API_PATH = "/api/v1/*";
@@ -39,8 +39,19 @@ public class Portal extends HttpServlet {
 	private static String HOME_PAGE = "index.html";
 	private static String HOME_FOLDER = "./site";
 	
+	private int webPort = WEB_PORT;
 	private Server _server;
 	private WebHandler webHandler;
+
+	
+	
+	public int getWebPort() {
+		return webPort;
+	}
+
+	public void setWebPort(int webPort) {
+		this.webPort = webPort;
+	}
 
 	public void init() {
 		ConfigLoader cfgLoader = ConfigLoader.getInstance();
@@ -56,6 +67,8 @@ public class Portal extends HttpServlet {
 		
 		WebHandler webHandler = new WebCmdHandler();
 		this.setWebHandler(webHandler);
+		
+		
 	}
 	
 	public WebHandler getWebHandler() {
@@ -70,27 +83,7 @@ public class Portal extends HttpServlet {
 
 
 
-	public void start(int nPort) throws Exception {
-		_server = new Server(nPort);
-		
-		
-		HandlerList handlers = new HandlerList();
-
-		Handler handler2 = createStaticWebApp(HOME_FOLDER, HOME_PAGE);
-		Handler handler3 = createServletApp(CMD_PATH);
-		Handler handler4 = createRestfulApp(API_PATH);
-		Handler handler5 = new DefaultHandler();
-		
-		
-		handlers.addHandler(handler2);
-		handlers.addHandler(handler3);
-		handlers.addHandler(handler4);
-		handlers.addHandler(handler5);
-		
-		_server.setHandler(handlers);
-		_server.start();
-		_server.join();
-	}
+	
 
 	public Handler createStaticWebApp(String homeFolder, String homePage) throws Exception {
 
@@ -108,7 +101,7 @@ public class Portal extends HttpServlet {
 
         
         ServletHandler handler = new ServletHandler();
-		handler.addServletWithMapping(Portal.class, path);
+		handler.addServletWithMapping(WebServer.class, path);
 			
 		return handler;
 	}
@@ -148,16 +141,68 @@ public class Portal extends HttpServlet {
 	
 	
 	
+
+
+	@Override
+	public void start() throws Exception {
+		
+		
+		_server = new Server(this.webPort);
+		
+		HandlerList handlers = new HandlerList();
+
+		Handler handler2 = createStaticWebApp(HOME_FOLDER, HOME_PAGE);
+		Handler handler3 = createServletApp(CMD_PATH);
+		Handler handler4 = createRestfulApp(API_PATH);
+		Handler handler5 = new DefaultHandler();
+		
+		
+		handlers.addHandler(handler2);
+		handlers.addHandler(handler3);
+		handlers.addHandler(handler4);
+		handlers.addHandler(handler5);
+		
+		_server.setHandler(handlers);
+		_server.start();
+		//_server.join();
+	}
+
+	@Override
+	public void stop() throws Exception {
+		_server.stop();
+		_server.join();
+		
+	}
+
+	@Override
+	public boolean isStarted() {
+		if(null == this._server)
+			return false;
+		return this._server.isStarted();		
+	}
+
+	@Override
+	public void clean() throws Exception {
+		this._server.destroy();
+		
+	}
+
+	@Override
+	public String getName() {
+		return "WebApplication";
+	}
+
 	
 	public static void main(String[] args) throws Exception {
 
 		int nPort = args.length == 0 ? WEB_PORT : Integer.parseInt(args[0]);
-		Portal webApp = new Portal();
+		
+		WebServer webApp = new WebServer();
+		webApp.setWebPort(nPort);
 		webApp.init();
-		webApp.start(nPort);
+		webApp.start();
 
 		
 		
 	}
-
 }
