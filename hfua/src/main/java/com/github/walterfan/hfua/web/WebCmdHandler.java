@@ -15,6 +15,8 @@ import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
+import com.github.walterfan.devaid.http.WebHandler;
+
 
 public class WebCmdHandler implements WebHandler {
 
@@ -99,6 +101,24 @@ public class WebCmdHandler implements WebHandler {
 	        }
 
 	    }
+
+
+
+
+
+		@Override
+		public boolean getNeedAuth() {
+			return false;
+		}
+
+
+
+
+
+		@Override
+		public String getPath() {
+			return "/cmd/v1";
+		}
 
 
 }

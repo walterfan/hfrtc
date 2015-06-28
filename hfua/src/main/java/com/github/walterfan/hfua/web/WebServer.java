@@ -1,27 +1,48 @@
 package com.github.walterfan.hfua.web;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
+
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
+
+
+
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang.math.NumberUtils;
-
 import org.eclipse.jetty.server.Handler;
+import org.eclipse.jetty.server.Request;
 import org.eclipse.jetty.server.Server;
+import org.eclipse.jetty.server.handler.AbstractHandler;
+import org.eclipse.jetty.server.handler.ContextHandler;
 import org.eclipse.jetty.server.handler.DefaultHandler;
+import org.eclipse.jetty.server.handler.ErrorHandler;
 import org.eclipse.jetty.server.handler.HandlerList;
 import org.eclipse.jetty.server.handler.ResourceHandler;
+import org.eclipse.jetty.servlet.DefaultServlet;
 import org.eclipse.jetty.servlet.ServletContextHandler;
-import org.eclipse.jetty.servlet.ServletHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
 import org.eclipse.jetty.util.log.Log;
 import org.eclipse.jetty.util.log.Logger;
 import org.jboss.resteasy.plugins.server.servlet.HttpServletDispatcher;
 
+
+
+
+
+
+
+
+
+import com.github.walterfan.devaid.http.JettyHandlerAdapter;
+import com.github.walterfan.devaid.http.WebHandler;
 import com.github.walterfan.service.IService;
 import com.github.walterfan.util.ConfigLoader;
+
 
 public class WebServer extends HttpServlet implements IService {
 	
@@ -32,7 +53,7 @@ public class WebServer extends HttpServlet implements IService {
 	private static final long serialVersionUID = 1L;
 	private static final Logger logger = Log.getLogger(WebServer.class);
 	private static final String CONFIG_DIR = "./etc";
-	private static final String CMD_PATH = "/cmd/v1/*";
+	
 	private static final String API_PATH = "/api/v1/*";
 	private static String CONFIG_FILE = "hfrtc.properties";
 	private static int WEB_PORT = 8080;
@@ -41,10 +62,18 @@ public class WebServer extends HttpServlet implements IService {
 	
 	private int webPort = WEB_PORT;
 	private Server _server;
-	private WebHandler webHandler;
+	//private WebHandler webHandler;
+	private Map<String, WebHandler> webHandlers = new HashMap<String, WebHandler>();
+	
+	
+	public Map<String, WebHandler> getWebHandlers() {
+		return webHandlers;
+	}
 
-	
-	
+	public void setWebHandlers(Map<String, WebHandler> webHandlers) {
+		this.webHandlers = webHandlers;
+	}
+
 	public int getWebPort() {
 		return webPort;
 	}
@@ -65,21 +94,13 @@ public class WebServer extends HttpServlet implements IService {
 		HOME_FOLDER = cfgLoader.getProperty("HOME_FOLDER","./site");
 		WEB_PORT = NumberUtils.toInt(cfgLoader.getProperty("WEB_PORT","" + WEB_PORT));
 		
-		WebHandler webHandler = new WebCmdHandler();
-		this.setWebHandler(webHandler);
+		//WebHandler webHandler = new WebCmdHandler();
+		//this.setWebHandler(webHandler);
 		
 		
 	}
 	
-	public WebHandler getWebHandler() {
-		return webHandler;
-	}
-
-
-
-	public void setWebHandler(WebHandler webHandler) {
-		this.webHandler = webHandler;
-	}
+	
 
 
 
@@ -96,14 +117,42 @@ public class WebServer extends HttpServlet implements IService {
 		return resource_handler;
 
 	}
-
-	public Handler createServletApp(String path) throws Exception {
+	
+	public Handler createServletHandler(String path, Handler handler) {
 
         
-        ServletHandler handler = new ServletHandler();
-		handler.addServletWithMapping(WebServer.class, path);
-			
-		return handler;
+        ContextHandler context1 = new ContextHandler();
+        context1.setContextPath(path);
+        context1.setResourceBase(".");
+        context1.setClassLoader(Thread.currentThread().getContextClassLoader());
+        context1.setHandler(handler);
+
+        return context1;
+	}
+
+	public void addWebHandlers(Server svr, HandlerList handlers) throws Exception {
+
+        for(Map.Entry<String, WebHandler> entry: webHandlers.entrySet()) {
+        	String path = entry.getKey();
+        	WebHandler webHandler = entry.getValue();
+        	if(null == webHandler) {
+        		continue;
+        	}
+        	
+        	Handler jettyHandler = new JettyHandlerAdapter(webHandler);
+        	
+        	ContextHandler ctxHandler = new ContextHandler();
+        	
+        	ctxHandler.setContextPath(path);
+        	ctxHandler.setHandler(jettyHandler);
+        	ctxHandler.setAllowNullPathInfo(true);
+        	
+        	handlers.addHandler(ctxHandler);
+            
+        	logger.info(path + " is set with handler: " + jettyHandler);
+        }
+       
+
 	}
 
     public Handler createRestfulApp(String path) {
@@ -113,12 +162,12 @@ public class WebServer extends HttpServlet implements IService {
 		ServletHolder servletHolder = new ServletHolder(
 				new HttpServletDispatcher());
 		servletHolder.setInitParameter("javax.ws.rs.Application",
-				"com.github.walter.rest.RestfulApplication");
+				"com.github.walterfan.hfua.rest.RestfulApplication");
 		context.addServlet(servletHolder, path);
 		return context;
     }
 	
-	@Override
+	/*@Override
 	protected void doGet(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
 		doPost(request, response);
@@ -138,7 +187,7 @@ public class WebServer extends HttpServlet implements IService {
 		response.getWriter().println("<h3>Sorry, the handler have not be implemented</h3>" + request.getServletPath());
 		
 	}
-	
+	*/
 	
 	
 
@@ -151,20 +200,23 @@ public class WebServer extends HttpServlet implements IService {
 		
 		HandlerList handlers = new HandlerList();
 
-		Handler handler2 = createStaticWebApp(HOME_FOLDER, HOME_PAGE);
-		Handler handler3 = createServletApp(CMD_PATH);
-		Handler handler4 = createRestfulApp(API_PATH);
-		Handler handler5 = new DefaultHandler();
+		Handler staticWebHandler = createStaticWebApp(HOME_FOLDER, HOME_PAGE);
+		Handler restWebHandler = createRestfulApp(API_PATH);
+		//Handler defaultHandler = new DefaultHandler();
+		//Handler testHandler = createServletHandler("/test");
 		
-		
-		handlers.addHandler(handler2);
-		handlers.addHandler(handler3);
-		handlers.addHandler(handler4);
-		handlers.addHandler(handler5);
+		handlers.addHandler(staticWebHandler);
+		handlers.addHandler(restWebHandler);
+		//handlers.addHandler(defaultHandler);
+		//handlers.addHandler(testHandler);
+
+		addWebHandlers(_server, handlers);
 		
 		_server.setHandler(handlers);
 		_server.start();
 		//_server.join();
+		
+		
 	}
 
 	@Override

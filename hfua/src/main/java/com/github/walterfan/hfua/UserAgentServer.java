@@ -7,9 +7,9 @@ import com.github.walterfan.service.AbstractService;
 import com.github.walterfan.service.ServiceMgr;
 import com.github.walterfan.service.GlobalBeanFactory;
 
-public class UserAgent extends AbstractService {
+public class UserAgentServer extends AbstractService {
 
-	private static Log logger = LogFactory.getLog(UserAgent.class);
+	private static Log logger = LogFactory.getLog(UserAgentServer.class);
 	
 	private GlobalBeanFactory beanFactory;
 	private ServiceMgr serviceMgr;
@@ -52,7 +52,7 @@ public class UserAgent extends AbstractService {
 	}
 
 	public static void main(String[] args) {
-		UserAgent ua = new UserAgent();
+		UserAgentServer ua = new UserAgentServer();
 		try {
 			ua.init();
 			ua.start();

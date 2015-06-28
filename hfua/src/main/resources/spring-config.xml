@@ -38,7 +38,56 @@
 
 	<bean id="signalServer" class="com.github.walterfan.hfua.SignalServer"/>
 
-	<bean id="webServer" class="com.github.walterfan.hfua.web.WebServer"/>
+    <bean id="cmdHandler" class="com.github.walterfan.hfua.web.WebCmdHandler"/>
+
+    <bean id="serverInfoMonitor" class="com.github.walterfan.devaid.http.ServerInfoMonitor">
+      </bean>
+
+        <bean id="serverStatusMonitor" class="com.github.walterfan.devaid.http.ServerStatusMonitor">
+        </bean>
+
+        <bean id="webRender" class="com.github.walterfan.devaid.http.BaseWebRender">
+                <constructor-arg index="0">
+                        <value>./etc/server-info.html</value>
+                </constructor-arg>
+        </bean>
+
+        <bean id="eventRender" class="com.github.walterfan.devaid.http.BaseWebRender">
+                <constructor-arg index="0">
+                        <value>./etc/server-event.html</value>
+                </constructor-arg>
+        </bean>
+        
+     <bean id="svrInfoHandler"
+                class="com.github.walterfan.devaid.http.BaseWebMonitorHandler">
+                <constructor-arg index="0">
+                        <value>/svrinfo</value>
+                </constructor-arg>
+                <property name="webMonitor" ref="serverInfoMonitor" />
+                <property name="webRender" ref="webRender" />
+                <property name="needAuth" value="true" />
+        </bean>
+
+        <bean id="eventHandler"
+                class="com.github.walterfan.devaid.http.BaseWebMonitorHandler">
+                <constructor-arg index="0">
+                        <value>/svrstatus</value>
+                </constructor-arg>
+                <property name="webMonitor" ref="serverStatusMonitor" />
+                <property name="webRender" ref="eventRender" />
+                <property name="needAuth" value="true" />
+        </bean>
+        
+
+	<bean id="webServer" class="com.github.walterfan.hfua.web.WebServer">
+        <property name="webHandlers">
+            <map>
+                <entry key="/svrinfo"   value-ref="svrInfoHandler" />
+                <entry key="/svrstatus" value-ref="eventHandler" />
+                <entry key="/cmd/v1"    value-ref="cmdHandler" />
+            </map>
+        </property>
+    </bean>
 
 	<bean id="serviceMgr" class="com.github.walterfan.service.ServiceMgr">
 		<property name="serviceMap">
@@ -66,7 +115,7 @@
     </bean>
 
 	<bean id="dataSource"
-		class="org.apache.commons.dbcp.BasicDataSource"
+		class="org.apache.commons.dbcp2.BasicDataSource"
 		destroy-method="close">
 		<property name="driverClassName"
 			value="${jdbc.driverClassName}" />
@@ -78,7 +127,7 @@
 		<property name="testOnBorrow" value="true" />
 		<property name="testWhileIdle" value="true" />
 		<!-- <property name="defaultAutoCommit" value="false"/> -->
-		<property name="validationQuery" value="select 1 from dual" />
+		<!-- <property name="validationQuery" value="select 1 from dual" />  -->
 	</bean>
 	
 	<!-- Transaction manager for a single JDBC DataSource -->
