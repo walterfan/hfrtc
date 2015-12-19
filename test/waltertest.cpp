@@ -5,6 +5,11 @@
 #include <string.h>
 #include <memory>
 
+class CTag {
+public:
+	CTag() {}
+	~CTag() {}
+};
 
 static char the_day[10] = "";
 
@@ -59,7 +64,7 @@ int main(int argc, char *argv[])
     } else {
         printf("--launch jouneries--\n");
 	}
-    EXECUTE_JOURNEY(20141031);
+    //EXECUTE_JOURNEY(20141031);
     
     string headers = "Acccept: application/json; charset=UTF-8\r\n";
     headers += "Content-Type: application/json; charset=UTF-8\r\n";
@@ -73,7 +78,10 @@ int main(int argc, char *argv[])
         cout << ' ' << *it<<"\n";
     cout << '\n';
 
-    
+    CTag* ptr = new CTag();
+	cout<<(ptr) <<endl;
+    cout<<(0 != ptr) <<endl;
+    cout<<(!ptr) <<endl;
     return 0;
 }
 
