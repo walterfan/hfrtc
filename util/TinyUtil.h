@@ -139,11 +139,13 @@ namespace wfan {
 
     std::string ReplaceValueAsKey(const std::string& str, const char*  szKey, const char* szMask, const char* szSep);
 
+    bool endswith(const std::string &str, const std::string &suffix);
+
 	int file2msg(const char* filename,std::string& msg);
 
 	int file2msg(const char* filename,char *msg);
 
-	int RetrieveFiles(const char* szFolder, std::vector<std::string>& files);
+	int RetrieveFiles(const char* szFolder, std::vector<std::string>& files, const char* szExt = NULL);
 
 	std::string UpperCase( const std::string& p_string );
 

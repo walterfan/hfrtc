@@ -8,12 +8,15 @@
 #include <cstring>
 #include <execinfo.h>
 #include <sys/types.h>
+#include <sys/stat.h>
 #include <dirent.h>
 #include <errno.h>
 #include <stdarg.h>
 #include <time.h>
 #include <sys/time.h>
 #include <stdint.h>
+
+#define DEBUG_TRACE printf
 
 int octet_weight[256] = {
   0, 1, 1, 2, 1, 2, 2, 3,
@@ -223,6 +226,14 @@ string ReplaceValueAsKey(const string& str, const char* key,
 	return str.substr(0, nBegin) + key + mask + str.substr(nEnd);
 }
 
+bool endswith(const std::string &str, const std::string &suffix)
+{
+    return str.size() >= suffix.size() &&
+           str.compare(str.size() - suffix.size(), suffix.size(), suffix) == 0;
+
+}
+
+
 int file2msg(const char* filename,string& msg)
 {
     ifstream ifile(filename);
@@ -256,7 +267,7 @@ int file2msg(const char* filename,char *msg)
     return 0;
 }
 
-int RetrieveFiles(const char* szFolder, vector<string>& files)
+int RetrieveFiles(const char* szFolder, vector<string>& vecFiles, const char* szExt)
 {
   struct dirent* direntp;
   DIR* dirp = opendir(szFolder);
@@ -269,13 +280,35 @@ int RetrieveFiles(const char* szFolder, vector<string>& files)
     string file = direntp->d_name;
     if(".." == file || "." == file)
         continue;
-    files.push_back(file);
+    
+    string strPath = szFolder;
+    strPath.append("/");
+    strPath.append(file);
+
+    struct stat stFileInfo;
+    int nStatus = stat(strPath.c_str(), &stFileInfo);
+    if (nStatus == 0 && S_ISDIR(stFileInfo.st_mode )) {
+        RetrieveFiles(strPath.c_str(), vecFiles, szExt);
+    }
+
+
+
+    if(NULL == szExt) {
+      vecFiles.push_back(strPath);
+    }
+    else {
+      bool hasSuffix = endswith(strPath, szExt);
+      if(hasSuffix) {
+        vecFiles.push_back(strPath);
+      }
+    }
   }
 
   while((-1 == closedir(dirp)) && (errno == EINTR));
 
-  return files.size();
+  return vecFiles.size();
 }
+
 
 string UpperCase( const string& p_string )
 {
