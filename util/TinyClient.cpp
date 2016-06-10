@@ -5,7 +5,7 @@
  *      Author: walter
  */
 
-#include <TinyClient.h>
+#include "TinyClient.h"
 
 TinyClient::TinyClient() {
 	// TODO Auto-generated constructor stub

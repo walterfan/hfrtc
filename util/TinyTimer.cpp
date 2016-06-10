@@ -12,10 +12,10 @@
 
 namespace wfan {
 
-const uint32_t ONE_MSEC_IN_USECS = 1000L;
+/*const uint32_t ONE_MSEC_IN_USECS = 1000L;
 const uint32_t ONE_SECOND_IN_MSECS = 1000L;
 const uint32_t ONE_SECOND_IN_USECS = 1000000L;
-const uint64_t ONE_SECOND_IN_NSECS = 1000000000L;
+const uint64_t ONE_SECOND_IN_NSECS = 1000000000L;*/
 
 
 

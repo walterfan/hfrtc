@@ -36,6 +36,10 @@ CTinyEchoServer::~CTinyEchoServer() {
 int CTinyEchoServer::Init(TRANSPORT_PROTOCOL trptType, int nPort)
 {
 	INFO_TRACE("CTinyEchoServer Init...");
+	this->m_svcType = SVC_ECHO;
+	this->m_trptType = trptType;
+	this->m_nPort = nPort;
+
 	return 0;
 }
 
@@ -163,8 +167,7 @@ do_read(int fd, struct fd_state *state)
     return 0;
 }
 
-int
-do_write(int fd, struct fd_state *state)
+int do_write(int fd, struct fd_state *state)
 {
     while (state->n_written < state->write_upto) {
         ssize_t result = send(fd, state->buffer + state->n_written,
@@ -176,7 +179,7 @@ do_write(int fd, struct fd_state *state)
         }
         assert(result != 0);
 
-        state->n_written += result;
+        state->n_written += (size_t)result;
     }
 
     if (state->n_written == state->buffer_used)

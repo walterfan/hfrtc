@@ -68,7 +68,7 @@ int octet_get_weight(uint8_t octet) {
 }  
 
 uint8_t nibble_to_hex_char(uint8_t nibble) {
-  char buf[16] = {'0', '1', '2', '3', '4', '5', '6', '7',
+  uint8_t buf[16] = {'0', '1', '2', '3', '4', '5', '6', '7',
 		  '8', '9', 'a', 'b', 'c', 'd', 'e', 'f' };
   return buf[nibble & 0xF];
 }
@@ -85,8 +85,8 @@ char * octet_string_hex_string(const void *s, int length) {
     length = MAX_PRINT_STRING_LEN-1;
   
   for (i=0; i < length; i+=2) {
-    bit_string[i]   = nibble_to_hex_char(*str >> 4);
-    bit_string[i+1] = nibble_to_hex_char(*str++ & 0xF);
+    bit_string[i]   = (char)nibble_to_hex_char(*str >> 4);
+    bit_string[i+1] = (char)nibble_to_hex_char(*str++ & 0xF);
   }
   bit_string[i] = 0; /* null terminate string */
   return bit_string;
@@ -124,7 +124,7 @@ static inline int hex_char_to_nibble(uint8_t c) {
 
 int is_hex_string(char *s) {
   while(*s != 0)
-    if (hex_char_to_nibble(*s++) == -1)
+    if (hex_char_to_nibble((uint8_t)*s++) == -1)
       return 0;
   return 1;
 }
@@ -141,17 +141,17 @@ int hex_string_to_octet_string(char *raw, char *hex, int len) {
 
   hex_len = 0;
   while (hex_len < len) {
-    tmp = hex_char_to_nibble(hex[0]);
+    tmp = hex_char_to_nibble((uint8_t)hex[0]);
     if (tmp == -1)
       return hex_len;
-    x = (tmp << 4);
+    x = (uint8_t)(tmp << 4);
     hex_len++;
-    tmp = hex_char_to_nibble(hex[1]);
+    tmp = hex_char_to_nibble((uint8_t)hex[1]);
     if (tmp == -1)
       return hex_len;
-    x |= (tmp & 0xff);
+    x |= (uint8_t)(tmp & 0xff);
     hex_len++;
-    *raw++ = x;
+    *raw++ = (char)x;
     hex += 2;
   }
   return hex_len;
@@ -306,7 +306,7 @@ int RetrieveFiles(const char* szFolder, vector<string>& vecFiles, const char* sz
 
   while((-1 == closedir(dirp)) && (errno == EINTR));
 
-  return vecFiles.size();
+  return (int)vecFiles.size();
 }
 
 
@@ -316,7 +316,7 @@ string UpperCase( const string& p_string )
 
     for( size_t i = 0; i < str.size(); i++ )
     {
-        str[i] = toupper( str[i] );
+        str[i] = (char)toupper( str[i] );
     }
     return str;
 }
@@ -327,7 +327,7 @@ string LowerCase( const string& p_string )
 
     for( size_t i = 0; i < str.size(); i++ )
     {
-        str[i] = tolower( str[i] );
+        str[i] = (char)tolower( str[i] );
     }
     return str;
 }
@@ -405,7 +405,7 @@ long long current_timestamp(char arrTimeStr[TIME_FMT_LEN]) {
 int load_file_malloc(const char* szFile, char*& pBuffer, long* pBufSize) 
 {
     FILE * pFile = NULL;
-    long lSize = 0;
+    size_t lSize = 0;
     size_t result = 0;
 
     pFile = fopen(szFile, "r");
@@ -416,7 +416,7 @@ int load_file_malloc(const char* szFile, char*& pBuffer, long* pBufSize)
 
     // obtain file size:
     fseek(pFile, 0, SEEK_END);
-    lSize = ftell(pFile);
+    lSize = (size_t)ftell(pFile);
     rewind(pFile);
 
     // allocate memory to contain the whole file:
@@ -435,7 +435,7 @@ int load_file_malloc(const char* szFile, char*& pBuffer, long* pBufSize)
         return 3;
     }
     if (pBufSize)
-        *pBufSize = lSize;
+        *pBufSize = (long)lSize;
 
     fclose(pFile);
     return 0;
@@ -443,54 +443,50 @@ int load_file_malloc(const char* szFile, char*& pBuffer, long* pBufSize)
 
 
 int base64_encode( char * lpszOutBuffer, int nOutLen, const void * lpszIn, int nInputLen )
-{
-  static unsigned char base64str[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
-  //  static char endofline[2] = {'\r', '\n'};
-  
-  int nNeededLen = (nInputLen + 2) / 3 * 4;
-   unsigned char * pInCur = (unsigned char *)lpszIn;
-   char * pszOut = lpszOutBuffer;
+ {
+    static unsigned char base64str[] =
+            "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
 
-   if( nInputLen <= 0 )
-   {
-       lpszOutBuffer[0] = '\0';
-       return 0;
-   }
- 
-   if( nOutLen < nNeededLen )
-       return -1;
-  
-   while( nInputLen >= 3 )
-  {
-    pszOut[0] = base64str[pInCur[0] >> 2];
-    pszOut[1] = base64str[((pInCur[0] & 0x3) << 4) | (pInCur[1] >> 4)];
-    pszOut[2] = base64str[((pInCur[1] &0xf) << 2) | (pInCur[2] >> 6)];
-    pszOut[3] = base64str[pInCur[2] & 0x3f];
+    int nNeededLen = (nInputLen + 2) / 3 * 4;
+    unsigned char * pInCur = (unsigned char *) lpszIn;
+    char * pszOut = lpszOutBuffer;
+
+    if (nInputLen <= 0) {
+        lpszOutBuffer[0] = '\0';
+        return 0;
+    }
+
+    if (nOutLen < nNeededLen)
+        return -1;
+
+    while (nInputLen >= 3) {
+        pszOut[0] = (char)base64str[pInCur[0] >> 2];
+        pszOut[1] = (char)base64str[((pInCur[0] & 0x3) << 4) | (pInCur[1] >> 4)];
+        pszOut[2] = (char)base64str[((pInCur[1] & 0xf) << 2) | (pInCur[2] >> 6)];
+        pszOut[3] = (char)base64str[pInCur[2] & 0x3f];
         pInCur += 3;
-       pszOut += 4;
-       nInputLen -= 3;
-  }
-  
-  switch( nInputLen )
-  {
-  case 1:
-    pszOut[0] = base64str[pInCur[0] >> 2];
-    pszOut[1] = base64str[(pInCur[0] & 0x3) << 4];
-    pszOut[2] = '=';
-    pszOut[3] = '=';
         pszOut += 4;
-    goto ret;
-  case 2:
-    pszOut[0] = base64str[pInCur[0] >> 2];
-    pszOut[1] = base64str[((pInCur[0] & 0x3) << 4) | (pInCur[1] >> 4)];
-    pszOut[2] = base64str[(pInCur[1] & 0xf) << 2];
-    pszOut[3] = '=';
+        nInputLen -= 3;
+    }
+
+    switch (nInputLen) {
+    case 1:
+        pszOut[0] = (char)base64str[pInCur[0] >> 2];
+        pszOut[1] = (char)base64str[(pInCur[0] & 0x3) << 4];
+        pszOut[2] = '=';
+        pszOut[3] = '=';
         pszOut += 4;
-    goto ret;
-  }
-  ret:
-   pszOut[0] = '\0';
-   return (int)(pszOut - lpszOutBuffer);
+        goto ret;
+    case 2:
+        pszOut[0] = (char)base64str[pInCur[0] >> 2];
+        pszOut[1] = (char)base64str[((pInCur[0] & 0x3) << 4) | (pInCur[1] >> 4)];
+        pszOut[2] = (char)base64str[(pInCur[1] & 0xf) << 2];
+        pszOut[3] = '=';
+        pszOut += 4;
+        goto ret;
+    }
+    ret: pszOut[0] = '\0';
+    return (int) (pszOut - lpszOutBuffer);
 }
 
 int base64_decode( char * lpszOutBuffer, int nOutLen, const char * pszSrc, int nInLen )
