@@ -53,7 +53,7 @@ rot13event1_CPPFLAGS= -I$(LIBEVENT_DIR)/include
 rot13event2_CPPFLAGS= -I$(LIBEVENT_DIR)/include
 
 
-waltertest_SOURCES = waltertest.cpp 20141031.cpp
+waltertest_SOURCES = waltertest.cpp
 waltertest_CPPFLAGS = -I$(top_srcdir)/util -I$(top_srcdir)/src -Wall -g -O0 --coverage
 # -fprofile-arcs -ftest-coverage
 waltertest_LDADD=../util/.libs/libtinyutil.a 

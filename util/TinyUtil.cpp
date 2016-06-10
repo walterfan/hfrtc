@@ -442,4 +442,149 @@ int load_file_malloc(const char* szFile, char*& pBuffer, long* pBufSize)
 }
 
 
+int base64_encode( char * lpszOutBuffer, int nOutLen, const void * lpszIn, int nInputLen )
+{
+  static unsigned char base64str[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
+  //  static char endofline[2] = {'\r', '\n'};
+  
+  int nNeededLen = (nInputLen + 2) / 3 * 4;
+   unsigned char * pInCur = (unsigned char *)lpszIn;
+   char * pszOut = lpszOutBuffer;
+
+   if( nInputLen <= 0 )
+   {
+       lpszOutBuffer[0] = '\0';
+       return 0;
+   }
+ 
+   if( nOutLen < nNeededLen )
+       return -1;
+  
+   while( nInputLen >= 3 )
+  {
+    pszOut[0] = base64str[pInCur[0] >> 2];
+    pszOut[1] = base64str[((pInCur[0] & 0x3) << 4) | (pInCur[1] >> 4)];
+    pszOut[2] = base64str[((pInCur[1] &0xf) << 2) | (pInCur[2] >> 6)];
+    pszOut[3] = base64str[pInCur[2] & 0x3f];
+        pInCur += 3;
+       pszOut += 4;
+       nInputLen -= 3;
+  }
+  
+  switch( nInputLen )
+  {
+  case 1:
+    pszOut[0] = base64str[pInCur[0] >> 2];
+    pszOut[1] = base64str[(pInCur[0] & 0x3) << 4];
+    pszOut[2] = '=';
+    pszOut[3] = '=';
+        pszOut += 4;
+    goto ret;
+  case 2:
+    pszOut[0] = base64str[pInCur[0] >> 2];
+    pszOut[1] = base64str[((pInCur[0] & 0x3) << 4) | (pInCur[1] >> 4)];
+    pszOut[2] = base64str[(pInCur[1] & 0xf) << 2];
+    pszOut[3] = '=';
+        pszOut += 4;
+    goto ret;
+  }
+  ret:
+   pszOut[0] = '\0';
+   return (int)(pszOut - lpszOutBuffer);
+}
+
+int base64_decode( char * lpszOutBuffer, int nOutLen, const char * pszSrc, int nInLen )
+{
+  static unsigned short BASE64_DECODE_TABLE[128] = {
+      255, 255, 255, 255, 255, 255, 255, 255, //  00 -  07
+      255, 255, 255, 255, 255, 255, 255, 255, //  08 -  15
+      255, 255, 255, 255, 255, 255, 255, 255, //  16 -  23
+      255, 255, 255, 255, 255, 255, 255, 255, //  24 -  31
+      255, 255, 255, 255, 255, 255, 255, 255, //  32 -  39
+      255, 255, 255,  62, 255, 255, 255,  63, //  40 -  47
+      52,  53,  54,  55,  56,  57,  58,  59, //  48 -  55
+      60,  61, 255, 255, 255, 255, 255, 255, //  56 -  63
+      255,   0,   1,   2,   3,   4,   5,   6, //  64 -  71
+      7,   8,   9,  10,  11,  12,  13,  14, //  72 -  79
+      15,  16,  17,  18,  19,  20,  21,  22, //  80 -  87
+      23,  24,  25, 255, 255, 255, 255, 255, //  88 -  95
+      255,  26,  27,  28,  29,  30,  31,  32, //  96 - 103
+      33,  34,  35,  36,  37,  38,  39,  40, // 104 - 111
+      41,  42,  43,  44,  45,  46,  47,  48, // 112 - 119
+      49,  50,  51, 255, 255, 255, 255, 255, // 120 - 127
+  };
+  const unsigned char * pszCur = (const unsigned char * )pszSrc;
+  char * pszOut = (char *)lpszOutBuffer;
+  unsigned long lByteBuffer = 0, lByteBufferSpace = 4;
+  unsigned short tc;
+  char *pSave = (char *)&lByteBuffer;
+  int nRet = 0;
+
+  if( nInLen > 0 )
+  {
+    int nTotal = nInLen % 4;
+    switch( nTotal )
+    {
+      case 2:
+        nTotal = nInLen * 3 / 4 + 1;
+        break;
+      case 3:
+        nTotal = nInLen * 3 / 4 + 2;
+        break;
+      case 0:
+        nTotal = nInLen * 3 / 4;
+        break;
+    }
+    if( nTotal > nOutLen )
+      return -1;
+  }
+  
+  if( pszSrc[0] == '\0' )
+    return 0;
+
+  while( *pszCur != '\0' )
+  {
+    if( *pszCur > 0x7f )
+    {
+      pszCur ++;
+      continue;
+    }
+    tc = BASE64_DECODE_TABLE[*pszCur];
+    pszCur ++;
+    if( 255 == tc )
+      continue;
+    lByteBuffer = (lByteBuffer << 6) | tc ;
+    lByteBufferSpace--;
+    if (lByteBufferSpace != 0) 
+      continue;
+         pszOut[0] = pSave[2];
+    pszOut[1] = pSave[1];
+    pszOut[2] = pSave[0];
+        pszOut += 3;
+    lByteBuffer = 0; lByteBufferSpace = 4;
+    nRet ++;
+  }
+  nRet *= 3;
+  switch(lByteBufferSpace)
+  {
+  case 1:
+    nRet += 2;
+    lByteBuffer >>= 2;
+    pszOut[0] = pSave[1];
+    pszOut[1] = pSave[0];
+        pszOut += 2;
+    break;
+  case 2:
+    nRet ++;
+    lByteBuffer >>= 4;
+    pszOut[0] = pSave[0];
+        pszOut ++;
+    break;
+  }
+  if( pszOut[0] != '\0' )
+    pszOut[0] = '\0';
+
+  return nRet;
+}
+
 }//--end of namespace wfan

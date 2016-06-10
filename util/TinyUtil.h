@@ -157,6 +157,11 @@ namespace wfan {
 	
 	int load_file_malloc(const char* szFile, char*& pBuffer, long* pBufSize = NULL) ;
 
+    int base64_encode( char * lpszOutBuffer, int nOutLen, const void * lpszIn, int nInputLen );
+
+    int base64_decode( char * lpszOutBuffer, int nOutLen, const char * pszSrc, int nInLen );
+
+
 }
 
 using namespace std;

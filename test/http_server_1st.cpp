@@ -83,12 +83,12 @@ static const struct table_entry {
 	{ "png", "image/png" },
 	{ "pdf", "application/pdf" },
 	{ "ps", "application/postsript" },
+	{ "json", "application/json" },
 	{ NULL, NULL },
 };
 
 /* Try to guess a good content-type for 'path' */
-static const char *
-guess_content_type(const char *path)
+static const char * guess_content_type(const char *path)
 {
 	const char *last_period, *extension;
 	const struct table_entry *ent;
@@ -155,8 +155,7 @@ dump_request_cb(struct evhttp_request *req, void *arg)
  * any other callback.  Like any evhttp server callback, it has a simple job:
  * it must eventually call evhttp_send_error() or evhttp_send_reply().
  */
-static void
-send_document_cb(struct evhttp_request *req, void *arg)
+static void send_document_cb(struct evhttp_request *req, void *arg)
 {
 	struct evbuffer *evb = NULL;
 	const char *docroot = (const char *)arg;
@@ -320,14 +319,12 @@ done:
 		evbuffer_free(evb);
 }
 
-static void
-syntax(void)
+static void syntax(void)
 {
 	fprintf(stdout, "Syntax: http-server <docroot> [port]\n");
 }
 
-int
-main(int argc, char **argv)
+int main(int argc, char **argv)
 {
 	struct event_base *base;
 	struct evhttp *http;
