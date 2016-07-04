@@ -63,7 +63,7 @@ void TinyChart::DrawGrid()
     int nFrameHeight=m_FrameBottomRightPoint.y-m_FrameTopLeftPoint.y;
     if(m_nHorziontalScale==0||m_nVerticalScale==0)
     {
-        cout<<__FILE__<<", "<<__LINE__<<" Error"<<endl;
+        TRACE(" Error m_nHorziontalScale=" << m_nHorziontalScale  << ", m_nVerticalScale="<< m_nVerticalScale);
         return;
     }
     int nWidthUnit=nFrameWidth/m_nHorziontalScale;
@@ -190,7 +190,7 @@ void TinyColumnChart::SetVerticalScale(INT_VEC& vecYScale)
 
 void TinyColumnChart::Plot()
 {
-    cout<<__FILE__<<", "<<__LINE__<<" TinyColumnChart::SetData"<<endl;
+    TRACE(" TinyColumnChart::SetData");
     int nColumnWidth=10,yMin=10,yZero=0,yMax=0,nMax=0;
     int nXUnit=m_xScale[1]->m_TopLeftPoint.x-m_xScale[0]->m_TopLeftPoint.x;
 
@@ -502,6 +502,9 @@ void TinyPieChart::SetVerticalScale(INT_VEC& vecYScale)
     }
     if(nSum==0)
         return;
+    else
+        m_nSum = nSum;
+
     for (int i = 0; i < m_nVerticalScale; ++i)
     {
         m_nData.push_back(10000*vecYScale[i]/nSum);
@@ -643,12 +646,13 @@ void TinyTrendlineDiagram::Draw()
     m_pCurveChart->Draw();
 }
 //---------------------------class TinyDatacenterDiagram--------//
-TinyDatacenterDiagram::TinyDatacenterDiagram(const char* filename,int width,int height):TinyDiagram(filename,width,height)
+TinyDistributionDiagram::TinyDistributionDiagram(const char* filename,int width,int height)
+:TinyDiagram(filename,width,height)
 {
     m_pPieChart=new TinyPieChart(m_pImage);
     m_pHistogram=new TinyHistogram(m_pImage);
 }
-TinyDatacenterDiagram::~TinyDatacenterDiagram()
+TinyDistributionDiagram::~TinyDistributionDiagram()
 {
     if(m_pImage!=NULL)
     {
@@ -660,7 +664,7 @@ TinyDatacenterDiagram::~TinyDatacenterDiagram()
     if(m_pHistogram!=NULL)
         delete m_pHistogram;
 }
-void TinyDatacenterDiagram::Draw()
+void TinyDistributionDiagram::Draw()
 {
     DrawBorder();
 

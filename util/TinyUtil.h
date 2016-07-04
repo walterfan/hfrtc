@@ -137,7 +137,7 @@ namespace wfan {
 
     std::string rtrim(const std::string& str, const std::string& whitespace = " \t");
 
-    std::string ReplaceValueAsKey(const std::string& str, const char*  szKey, const char* szMask, const char* szSep);
+    bool ReplaceValueAsKey(std::string& str, const char*  szKey, const char* szMask, const char* szSep);
 
     bool endswith(const std::string &str, const std::string &suffix);
 

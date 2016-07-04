@@ -419,12 +419,7 @@ public:
             delete m_yScale[k];
         m_yScale.clear();
     };
-    INT_VEC m_nData;
-    vector<TinyShape*> m_Shapes;
-    vector<TinyScale*> m_xScale;
-    vector<TinyScale*> m_yScale;
-    int m_nVerticalScale;
-    int m_nHorziontalScale;
+
 
     void SetPosition(int x1,int y1,int x2,int y2)
     {
@@ -471,6 +466,13 @@ public:
     void DrawBorder();
 
     void Draw();
+protected:
+    INT_VEC m_nData;
+    vector<TinyShape*> m_Shapes;
+    vector<TinyScale*> m_xScale;
+    vector<TinyScale*> m_yScale;
+    int m_nVerticalScale;
+    int m_nHorziontalScale;
 };
 
 class TinyCurveChart:public TinyChart
@@ -523,12 +525,14 @@ public:
     void SetHorziontalScale(STR_VEC& vecXScale);
     void SetVerticalScale(INT_VEC& vecYScale);
     TinyColor GetRandColor(int index=-1);
-    TinyPieChart(gdImagePtr im):TinyChart(im)
+    TinyPieChart(gdImagePtr im):TinyChart(im), m_nSum(0)
     {
 
     };
     virtual ~TinyPieChart()
     {};
+private:
+    int m_nSum;
 };
 class TinyDiagram
 {
@@ -579,14 +583,15 @@ public:
     void Draw();
 };
 
-class TinyDatacenterDiagram:public TinyDiagram
+class TinyDistributionDiagram:public TinyDiagram
 {
 public:
     TinyPieChart* m_pPieChart;
     TinyHistogram* m_pHistogram;
     void Draw();
-    TinyDatacenterDiagram(const char* filename,int width,int height);
-    virtual ~TinyDatacenterDiagram();
+    TinyDistributionDiagram(const char* filename,int width,int height);
+    virtual ~TinyDistributionDiagram();
+
 };
 
 

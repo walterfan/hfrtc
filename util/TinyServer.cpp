@@ -215,8 +215,8 @@ run(void)
         setsockopt(listener, SOL_SOCKET, SO_REUSEADDR, &one, sizeof(one));
     }
 #endif
-
-    if (bind(listener, (struct sockaddr*)&sin, sizeof(sin)) < 0) {
+    int ret = ::bind(listener, (struct sockaddr*)&sin, sizeof(sin));
+    if (ret < 0) {
         perror("bind");
         return;
     }

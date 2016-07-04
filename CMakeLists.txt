@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.1)
+cmake_minimum_required(VERSION 2.8)
 
 project(hfrtc C CXX)
 
@@ -26,7 +26,8 @@ set(CXX_FLAGS
  -Wwrite-strings
  -march=native
  # -MMD
- # -std=c++0x
+ -std=c++0x 
+# -stdlib=libc++
  #-rdynamic
  )
 if(CMAKE_BUILD_BITS EQUAL 32)
@@ -44,6 +45,10 @@ find_package(Boost REQUIRED)
 find_package(Protobuf)
 find_package(CURL)
 find_package(ZLIB)
+find_package(GTEST)
+
+find_path(GMOCK_INCLUDE_DIR gmock/gmock.h)
+find_library(GMOCK_LIBRARY NAMES gmock)
 
 find_path(CARES_INCLUDE_DIR ares.h)
 find_library(CARES_LIBRARY NAMES cares)
@@ -55,15 +60,21 @@ find_path(TCMALLOC_INCLUDE_DIR gperftools/heap-profiler.h)
 find_library(TCMALLOC_LIBRARY NAMES tcmalloc_and_profiler)
 find_path(HIREDIS_INCLUDE_DIR hiredis/hiredis.h)
 find_library(HIREDIS_LIBRARY NAMES hiredis)
+
 find_path(GD_INCLUDE_DIR gd.h)
 find_library(GD_LIBRARY NAMES gd)
 
 find_path(LUA_INCLUDE_DIR lua.h)
 find_library(LUA_LIBRARY NAMES lua)
 
+if(GMOCK_INCLUDE_DIR AND GMOCK_LIBRARY)
+  message(STATUS "found gmock")
+endif()
+
 if(CARES_INCLUDE_DIR AND CARES_LIBRARY)
   message(STATUS "found cares")
 endif()
+
 if(CURL_FOUND)
   message(STATUS "found curl")
 endif()
@@ -76,9 +87,11 @@ endif()
 if(ZLIB_FOUND)
   message(STATUS "found zlib")
 endif()
+
 if(HIREDIS_INCLUDE_DIR AND HIREDIS_LIBRARY)
   message(STATUS "found hiredis")
 endif()
+
 if(GD_INCLUDE_DIR AND GD_LIBRARY)
   message(STATUS "found gd")
 endif()
@@ -95,9 +108,6 @@ include_directories(${PROJECT_SOURCE_DIR}/util)
 include_directories(${PROJECT_SOURCE_DIR}/src)
 
 link_directories(/usr/local/lib)
-
-
-message("PROJECT_SOURCE_DIR: ${PROJECT_SOURCE_DIR}")
 
 string(TOUPPER ${CMAKE_BUILD_TYPE} BUILD_TYPE)
 message(STATUS "CXX_FLAGS = " ${CMAKE_CXX_FLAGS} " " ${CMAKE_CXX_FLAGS_${BUILD_TYPE}})

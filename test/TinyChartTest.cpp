@@ -45,7 +45,7 @@ int main(int argc, char **argv)
         yScales.push_back(200);
 
         TinyTrendlineDiagram* pt = new TinyTrendlineDiagram(
-                "trendline_test.png", 800, 250);
+                "latency_trendline.png", 800, 250);
         pt->SetTitle("Trend of Latency (the middle network latency is the value of 0 coordinate)");
         pt->SetLabels(xScales);
         pt->SetValues(yScales);
@@ -57,14 +57,14 @@ int main(int argc, char **argv)
 
     {
         STR_VEC xScales;
-        xScales.push_back("San Jose");
-        xScales.push_back("Denver");
-        xScales.push_back("Virginia");
-        xScales.push_back("London");
-        xScales.push_back("tokyo");
-        xScales.push_back("Hon kong");
-        xScales.push_back("Melbourne");
-        xScales.push_back("Mumbai");
+        xScales.push_back("America");
+        xScales.push_back("China");
+        xScales.push_back("Japan");
+        xScales.push_back("England");
+        xScales.push_back("France");
+        xScales.push_back("Germany");
+        xScales.push_back("South Korean");
+        xScales.push_back("India");
 
         INT_VEC yScales;
         yScales.push_back(4800);
@@ -76,9 +76,9 @@ int main(int argc, char **argv)
         yScales.push_back(258);
         yScales.push_back(1789);
 
-        TinyDatacenterDiagram* pd = new TinyDatacenterDiagram(
-                "datacenter_usage.png", 800, 600);
-        pd->SetTitle("Daily active users distribution among the data centers");
+        TinyDistributionDiagram* pd = new TinyDistributionDiagram(
+                "users_distribution.png", 800, 600);
+        pd->SetTitle("Daily active users distribution among the countries");
         pd->SetLabels(xScales);
         pd->SetValues(yScales);
         pd->Draw();

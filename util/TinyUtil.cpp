@@ -211,19 +211,20 @@ std::string rtrim(const std::string& str, const std::string& whitespace )
     return str.substr(0, strRange);
 }
 
-string ReplaceValueAsKey(const string& str, const char* key,
-		const char* mask, const char* sep)
+bool ReplaceValueAsKey(string& str, const char* key, const char* mask, const char* sep)
 {
 
-	string::size_type nBegin = str.find(key);
-	if(string::npos == nBegin) return str;
+    string::size_type nBegin = str.find(key);
+    if(string::npos == nBegin) return false;
 
-	string::size_type nEnd = str.find(sep, nBegin);
+    string::size_type nEnd = str.find(sep, nBegin);
 
-	if(string::npos == nEnd) {
-		return str.substr(0, nBegin) + key + mask;
-	}
-	return str.substr(0, nBegin) + key + mask + str.substr(nEnd);
+    if(string::npos == nEnd) {
+        str  = str.substr(0, nBegin) + key + mask;
+    } else {
+        str = str.substr(0, nBegin) + key + mask + str.substr(nEnd);
+    }
+    return true;
 }
 
 bool endswith(const std::string &str, const std::string &suffix)
