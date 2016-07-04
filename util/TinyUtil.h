@@ -123,6 +123,7 @@
     } while(0)
 #endif
 
+#define LOG(format, ...) fprintf(stderr, "[%s@%s,%d] " format "\n", __func__, __FILE__, __LINE__, ##__VA_ARGS__)
 
 #define LOG_TRACE(...) wfan::WriteLog(__FILE__, __LINE__, __VA_ARGS__ )
 

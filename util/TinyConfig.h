@@ -8,6 +8,12 @@
 #ifndef UTIL_TINYCONFIG_H_
 #define UTIL_TINYCONFIG_H_
 
+#include <map>
+#include <string>
+#include <stdio.h>
+
+
+
 namespace wfan {
 
 struct ConfigItemKey {
@@ -26,15 +32,20 @@ struct KeyComparable {
     }
 };
 
-typedef map<ConfigItemKey, std::string, KeyComparable> ConfigItemMap;
+typedef std::map<ConfigItemKey, std::string, KeyComparable> ConfigItemMap;
 
 class TinyConfig {
 public:
     TinyConfig();
     virtual ~TinyConfig();
 
-    void addConfigItem(ConfigItemKey key, std::string val);
-    std::string& getConfigItem(ConfigItemKey key);
+    int ReadConfigFile(const char* szFilename);
+
+    void AddConfigItem(ConfigItemKey key, std::string val);
+
+    std::string GetConfigItem(ConfigItemKey key);
+
+    std::string GetConfigItem(std::string groupName, std::string keyName);
 private:
     ConfigItemMap configItemMap;
 };

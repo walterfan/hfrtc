@@ -1,4 +1,4 @@
-set(TinyUtil_SRCS TinyUtil.cpp  TinyTimer.cpp  TinyServer.cpp  TinyClient.cpp  TinyRio.cpp TinyChart.cpp LuaUtil.cpp)
+set(TinyUtil_SRCS TinyUtil.cpp TinyConfig.cpp TinyTimer.cpp  TinyServer.cpp  TinyClient.cpp  TinyRio.cpp TinyChart.cpp LuaUtil.cpp)
 
 add_library(tinyutil ${TinyUtil_SRCS})
 
