@@ -10,7 +10,6 @@
 
 #include <map>
 #include <string>
-#include <stdio.h>
 
 
 
@@ -18,21 +17,25 @@ namespace wfan {
 
 struct ConfigItemKey {
     std::string groupName;
-    std::string itemName;
+    std::string keyName;
+
+    ConfigItemKey(std::string aGroupName, std::string aKeyName): groupName(aGroupName), keyName(aKeyName) {
+
+    }
 };
 
-struct KeyComparable {
+struct KeyLessComparator {
     bool operator()(ConfigItemKey item1, ConfigItemKey item2) const
     {
         int ret = item1.groupName.compare(item2.groupName) ;
         if(ret == 0) {
-           return item1.itemName.compare(item2.itemName);
+           return item1.keyName.compare(item2.keyName) < 0;
         }
-        return ret;
+        return ret < 0;
     }
 };
 
-typedef std::map<ConfigItemKey, std::string, KeyComparable> ConfigItemMap;
+typedef std::map<ConfigItemKey, std::string, KeyLessComparator> ConfigItemMap;
 
 class TinyConfig {
 public:
@@ -41,14 +44,26 @@ public:
 
     int ReadConfigFile(const char* szFilename);
 
-    void AddConfigItem(ConfigItemKey key, std::string val);
+    int size() { return m_configItemMap.size(); };
 
-    std::string GetConfigItem(ConfigItemKey key);
+    void AddConfigItem(ConfigItemKey key, std::string value);
 
-    std::string GetConfigItem(std::string groupName, std::string keyName);
+    void AddConfigItem(std::string groupName, std::string keyName, std::string value) ;
+
+    std::string GetConfigItem(const ConfigItemKey& key, const std::string aDefaultValue = "") const;
+
+    std::string GetConfigItem(const std::string& groupName, const std::string& keyName, const std::string aDefaultValue = "") const;
+
+    bool HasConfigItem(const std::string& groupName, const std::string& keyName, char* szDest = NULL, int nDest = 0) const;
+
+    friend std::ostream& operator<<(std::ostream &os, const TinyConfig &cfg);
+
 private:
-    ConfigItemMap configItemMap;
+    ConfigItemMap m_configItemMap;
 };
+
+
+std::ostream& operator<<(std::ostream &os, const TinyConfig &cfg);
 
 } /* namespace wfan */
 

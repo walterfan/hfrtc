@@ -19,6 +19,14 @@ Dependent Tools
 * Maven
 
 
+Build
+-------------------------------
+./autogen.sh
+./configure
+make
+make install
+
+
 Reference
 ------------------------------
 * [WebRTC] (http://www.webrtc.org/)

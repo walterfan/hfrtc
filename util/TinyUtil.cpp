@@ -235,6 +235,18 @@ bool endswith(const std::string &str, const std::string &suffix)
 }
 
 
+bool startwith(const std::string &str, const std::string &prefix)
+{
+    string::size_type totalSize = str.size();
+    string::size_type prefixSize = prefix.size();
+
+    if(totalSize < prefixSize) {
+        return false;
+    }
+
+    return str.compare(0, prefixSize, prefix) == 0;
+}
+
 int file2msg(const char* filename,string& msg)
 {
     ifstream ifile(filename);

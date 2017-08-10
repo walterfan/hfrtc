@@ -123,9 +123,8 @@
     } while(0)
 #endif
 
-#define LOG(format, ...) fprintf(stderr, "[%s@%s,%d] " format "\n", __func__, __FILE__, __LINE__, ##__VA_ARGS__)
-
-#define LOG_TRACE(...) wfan::WriteLog(__FILE__, __LINE__, __VA_ARGS__ )
+#define LOG_TRACE(fmt,...) printf("[%s@%s:%d] " fmt "\n",  __func__,__FILE__, __LINE__, ##__VA_ARGS__)
+//#define LOG_TRACE(...) wfan::WriteLog(__FILE__, __LINE__, __VA_ARGS__ )
 
 char * octet_string_hex_string(const void *s, int length);
 
@@ -139,6 +138,8 @@ namespace wfan {
     std::string rtrim(const std::string& str, const std::string& whitespace = " \t");
 
     bool ReplaceValueAsKey(std::string& str, const char*  szKey, const char* szMask, const char* szSep);
+
+    bool startwith(const std::string &str, const std::string &prefix);
 
     bool endswith(const std::string &str, const std::string &suffix);
 
