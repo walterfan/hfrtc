@@ -57,7 +57,7 @@ void TinyChart::SetHorziontalScale(STR_VEC& vecXScale)
 
 void TinyChart::DrawGrid()
 {
-    cout<<__FILE__<<", "<<__LINE__<<" TinyChart::DrawGrid "\
+    //cout<<__FILE__<<", "<<__LINE__<<" TinyChart::DrawGrid "\
     <<m_nHorziontalScale<<", "<<m_nVerticalScale<<endl;
     int nFrameWidth=m_FrameBottomRightPoint.x-m_FrameTopLeftPoint.x;
     int nFrameHeight=m_FrameBottomRightPoint.y-m_FrameTopLeftPoint.y;
@@ -172,7 +172,7 @@ void TinyColumnChart::SetVerticalScale(INT_VEC& vecYScale)
         TinyScale* pScale=new TinyScale(m_pImage,m_BorderColor);
 
         int nScale=nMaxScale-nUnitScale*i;
-        cout<<__FILE__<<", "<<__LINE__<<" nScale: "<<nScale<<endl;
+        //cout<<__FILE__<<", "<<__LINE__<<" nScale: "<<nScale<<endl;
         char szBuf[10];
         sprintf(szBuf,"%d",nScale);
 

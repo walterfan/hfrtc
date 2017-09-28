@@ -43,10 +43,10 @@ using namespace std;  // std c++ libs implemented in std
 
 #define PI 3.14159265357989
 
-#ifdef NDEBUG
-#define TRACE(msg)
-#else
+#ifdef DEBUG
 #define TRACE(msg)  cout<<__FILE__<<", "<<__LINE__<<": "<<msg<<endl;
+#else
+#define TRACE(msg)
 #endif
 
 typedef map<string, int, less<string>, allocator<int> > STR2INT_MAP;
